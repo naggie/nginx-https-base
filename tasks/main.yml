@@ -1,0 +1,50 @@
+- name: install nginx + letsencrypt
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  become: yes
+  with_items:
+    - nginx
+    - letsencrypt
+
+- name: Copy nginx config file for HTTP challenge + SSL settings
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/
+  become: yes
+  notify:
+    - restart nginx
+
+- name: Remove default http nginx vhost
+  become: yes
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify:
+    - restart nginx
+
+- name: make HTTP challenge directory
+  become: yes
+  file:
+    path: /var/www/letsencrypt/.well-known
+    state: directory
+    owner: www-data
+    group: www-data
+
+- name: Initialise domains
+  command:
+    cmd: letsencrypt certonly -n --agree-tos --webroot --webroot-path /var/www/letsencrypt --email {{admin_email}} -d {{item}}
+    creates:
+      /etc/letsencrypt/live/{{item}}/fullchain.pem
+  with_items: "{{domains}}"
+  become: true
+
+- name: Add cron job to auto renew
+  cron:
+    name: Renew certificates
+    minute: 21
+    hour: 3
+    job: letsencrypt renew -n
+    user: root
+  become: true
