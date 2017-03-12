@@ -1,0 +1,15 @@
+# TODO error documents
+location /robots.txt {
+    return 200 'User-agent: *\nDisallow: /\n';
+}
+
+location /favicon.ico {
+    return 404;
+    access_log     off;
+    log_not_found  off;
+}
+
+location /ip {
+    return 200 $realip_remote_addr;
+    add_header Content-Type text/plain;
+}

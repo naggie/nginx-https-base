@@ -8,10 +8,15 @@
     - nginx
     - letsencrypt
 
-- name: Copy nginx config file for HTTP challenge + SSL settings
+- name: Copy nginx config files for HTTP challenge + SSL settings
   copy:
     src: nginx.conf
     dest: /etc/nginx/
+  with_items:
+    - nginx.conf
+    - default_locations
+    - proxy_params
+    - uwsgi_params
   become: yes
   notify:
     - restart nginx
