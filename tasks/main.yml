@@ -10,7 +10,7 @@
 
 - name: Copy nginx config files for HTTP challenge + SSL settings
   copy:
-    src: nginx.conf
+    src: "{{item}}"
     dest: /etc/nginx/
   with_items:
     - nginx.conf
