@@ -53,3 +53,24 @@
     job: letsencrypt renew -n
     user: root
   become: true
+
+# TODO -- could just keep files instead of templates, most commonality is in _params files
+#- name: Create nginx static sites
+#  template:
+#    src: static.conf
+#    dest: /etc/nginx/sites-enabled/{{item.domain}}.conf
+#  become: yes
+#  with_items:
+#    - { domain: naggie.net }
+#  notify:
+#    - restart nginx
+#
+#- name: Create nginx proxies
+#  template:
+#    src: proxy.conf
+#    dest: /etc/nginx/sites-enabled/{{item.domain}}.conf
+#  become: yes
+#  with_items:
+#    - { domain: metrics.naggie.net, target: 'http://localhost:8001' }
+#  notify:
+#    - restart nginx
