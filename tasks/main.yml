@@ -14,7 +14,7 @@
     dest: /etc/nginx/
   with_items:
     - nginx.conf
-    - default_locations
+    - server_defaults
     - proxy_params
     - uwsgi_params
   become: yes
