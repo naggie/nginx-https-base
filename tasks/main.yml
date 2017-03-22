@@ -7,6 +7,15 @@
   with_items:
     - nginx
     - letsencrypt
+    - openssl
+
+# https://weakdh.org/sysadmin.html
+- name: Generate secure dhparams
+  command:
+    cmd: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+    creates:
+      /etc/nginx/dhparams.pem
+  become: true
 
 - name: Copy nginx config files for HTTP challenge + SSL settings
   copy:
