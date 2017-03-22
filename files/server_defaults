@@ -1,6 +1,9 @@
 listen 443 ssl http2;
 listen [::]:443 ssl http2;
 
+# no effect over HTTP, so its here
+add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+
 # TODO error documents
 location /robots.txt {
     return 200 'User-agent: *\nDisallow: /\n';
