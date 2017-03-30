@@ -63,23 +63,41 @@
     user: root
   become: true
 
-# TODO -- could just keep files instead of templates, most commonality is in _params files
-#- name: Create nginx static sites
-#  template:
-#    src: static.conf
-#    dest: /etc/nginx/sites-enabled/{{item.domain}}.conf
-#  become: yes
-#  with_items:
-#    - { domain: naggie.net }
-#  notify:
-#    - restart nginx
-#
-#- name: Create nginx proxies
-#  template:
-#    src: proxy.conf
-#    dest: /etc/nginx/sites-enabled/{{item.domain}}.conf
-#  become: yes
-#  with_items:
-#    - { domain: metrics.naggie.net, target: 'http://localhost:8001' }
-#  notify:
-#    - restart nginx
+
+- name: Create nginx static sites
+  template:
+    src: static.conf
+    dest: /etc/nginx/sites-enabled/{{item.domain}}.conf
+  become: yes
+  with_items:
+    - domain: naggie.net
+  notify:
+    - restart nginx
+
+- name: Create nginx www-redirects
+  template:
+    src: www-redirect.conf
+    dest: /etc/nginx/sites-enabled/www.{{item.domain}}.conf
+  become: yes
+  with_items:
+    - domain: naggie.net
+  notify:
+    - restart nginx
+
+- name: Create nginx proxies
+  template:
+    src: proxy.conf
+    dest: /etc/nginx/sites-enabled/{{item.domain}}.conf
+  become: yes
+  with_items:
+    - domain: metrics.naggie.net
+      target: 'http://localhost:8001'
+      auth: false
+    - domain: s3.naggie.net
+      target: 'http://localhost:8002'
+      auth: false
+    - domain: modem.naggie.net
+      target: 'http://192.168.1.1'
+      Host: '$proxy_host'
+  notify:
+    - restart nginx
