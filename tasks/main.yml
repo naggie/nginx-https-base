@@ -71,14 +71,3 @@
   with_items: "{{nginx_sites}}"
   notify:
     - restart nginx
-
-- name: Create nginx www-redirects
-  template:
-    src: www-redirect.conf
-    dest: /etc/nginx/sites-enabled/www.{{item.domain}}.conf
-  become: yes
-  with_items: "{{nginx_sites}}"
-  when: "{{item.www_redirect|default(false)}}"
-  notify:
-    - restart nginx
-
