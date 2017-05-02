@@ -46,7 +46,10 @@
     owner: www-data
     group: www-data
 
-- name: Initialise domains
+# nginx needs to be restarted if changed before letsencrypt challenge! -- but only if handler would have run otherwise
+- meta: flush_handlers
+
+- name: Initialise domains + grab initial certs
   command:
     cmd: letsencrypt certonly -n --agree-tos --webroot --webroot-path /var/www/letsencrypt --email {{admin_email}} -d {{item.domain}}
     creates:
