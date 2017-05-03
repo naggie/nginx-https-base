@@ -19,3 +19,29 @@ location /ip {
     return 200 $realip_remote_addr;
     add_header Content-Type text/plain;
 }
+
+# TODO replace with nice HTML?
+error_page 401 @401;
+error_page 403 @403;
+error_page 404 @404;
+error_page 500 501 502 503 504 @50x;
+
+location @401 {
+  default_type text/plain;
+  return 401 '401 Unauthorized';
+}
+
+location @403 {
+  default_type text/plain;
+  return 200 '403 Forbidden. Access from VPN only.';
+}
+
+location @404 {
+  default_type text/plain;
+  return 404 '404 Not Found';
+}
+
+location @50x {
+  default_type text/plain;
+  return 500 'Internal server error.';
+}
