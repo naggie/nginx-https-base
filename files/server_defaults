@@ -4,7 +4,6 @@ listen [::]:443 ssl http2;
 # no effect over HTTP, so its here
 add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
 
-# TODO error documents
 location /robots.txt {
     return 200 'User-agent: *\nDisallow: /\n';
 }
@@ -20,28 +19,13 @@ location /ip {
     add_header Content-Type text/plain;
 }
 
-# TODO replace with nice HTML?
-error_page 401 @401;
-error_page 403 @403;
-error_page 404 @404;
-error_page 500 501 502 503 504 @50x;
+error_page 401 403 /_errors/denied.html;
+error_page 404 /_errors/notfound.html;
+error_page 500 501 502 503 504 /_errors/error.html;
 
-location @401 {
-  default_type text/plain;
-  return 401 '401 Unauthorized';
+location /_errors/ {
+  alias /etc/nginx/error_pages/;
+  internal;
+  allow all;
 }
 
-location @403 {
-  default_type text/plain;
-  return 200 '403 Forbidden. Access from VPN only.';
-}
-
-location @404 {
-  default_type text/plain;
-  return 404 '404 Not Found';
-}
-
-location @50x {
-  default_type text/plain;
-  return 500 'Internal server error.';
-}
