@@ -16,6 +16,8 @@
     creates:
       /etc/nginx/dhparams.pem
   become: true
+  notify:
+    - restart nginx
 
 - name: Copy nginx config files for HTTP challenge + SSL settings
   copy:
