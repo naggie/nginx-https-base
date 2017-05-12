@@ -24,8 +24,10 @@ error_page 404 /_errors/notfound.html;
 error_page 500 501 502 503 504 /_errors/error.html;
 
 location /_errors/ {
-  alias /etc/nginx/error_pages/;
-  internal;
-  allow all;
+    root /var/www/error_pages/;
+    rewrite ^/_errors/(.*)$ /$1 last;
+    try_files $host/$uri $uri;
+    internal;
+    allow all;
 }
 

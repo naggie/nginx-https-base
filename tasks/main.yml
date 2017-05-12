@@ -51,7 +51,7 @@
 - name: make error_pages directory
   become: yes
   file:
-    path: /etc/nginx/error_pages/
+    path: /var/www/error_pages/
     state: directory
     owner: www-data
     group: www-data
@@ -60,7 +60,7 @@
 - name: Copy HTML error pages
   copy:
     src: "error_pages/{{item}}"
-    dest: /etc/nginx/error_pages/
+    dest: /var/www/error_pages/
     owner: www-data
     group: www-data
   with_items:
