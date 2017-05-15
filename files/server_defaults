@@ -23,10 +23,9 @@ error_page 401 403 /_errors/denied.html;
 error_page 404 /_errors/notfound.html;
 error_page 500 501 502 503 504 /_errors/error.html;
 
-location /_errors/ {
+location ~ /_errors/(.*) {
     root /var/www/error_pages/;
-    rewrite ^/_errors/(.*)$ /$1 last;
-    try_files $host/$uri $uri;
+    try_files /$host/$1 /$1;
     internal;
     allow all;
 }
