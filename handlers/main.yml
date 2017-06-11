@@ -1,3 +1,8 @@
 - name: restart nginx
   service: name=nginx state=restarted
   become: true
+
+# independent of flush handlers. BUG IMO.
+- name: no really, restart nginx
+  service: name=nginx state=restarted
+  become: true

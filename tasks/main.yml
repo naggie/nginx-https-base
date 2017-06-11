@@ -99,3 +99,5 @@
   with_items: "{{sites}}"
   notify:
     - restart nginx
+    - no really, restart nginx
+
