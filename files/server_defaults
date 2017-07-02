@@ -21,7 +21,8 @@ location /ip {
 
 error_page 401 403 @denied;
 error_page 404 @notfound;
-error_page 400 500 501 502 503 504 @error;
+error_page 400 500 501 503 504 @offline;
+error_page 502 @offline;
 
 # Unimpressed? see bug https://trac.nginx.org/nginx/ticket/97
 location @denied {
@@ -39,5 +40,11 @@ location @notfound {
 location @error {
     root /var/www/error_pages/;
     try_files /$host/error.html /error.html;
+    allow all;
+}
+
+location @offline {
+    root /var/www/error_pages/;
+    try_files /$host/offline.html /offline.html;
     allow all;
 }
