@@ -57,12 +57,14 @@
     group: www-data
 
 
-- name: Copy HTML error pages
+- name: Copy HTML error pages if they're not already there
+  # override them if you like, with a role that uses this role.
   copy:
     src: "error_pages/{{item}}"
     dest: /var/www/error_pages/
     owner: www-data
     group: www-data
+    force: no
   with_items:
     - error.html
     - offline.html

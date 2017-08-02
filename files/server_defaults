@@ -22,32 +22,14 @@ location /ip {
     add_header Content-Type text/plain;
 }
 
-error_page 401 403 @denied;
-error_page 404 @notfound;
-error_page 400 500 501 503 504 @offline;
-error_page 502 @offline;
+error_page 401 403 /_errors/denied.html;
+error_page 404 /_errors/notfound.html;
+error_page 400 500 501 503 504 /_errors/error.html;
+error_page 502 /_errors/offline.html;
 
-# Unimpressed? see bug https://trac.nginx.org/nginx/ticket/97
-location @denied {
-    root /var/www/error_pages/;
-    try_files /$host/denied.html /denied.html;
+location /_errors/ {
+    internal;
+    alias /var/www/error_pages/;
     allow all;
 }
 
-location @notfound {
-    root /var/www/error_pages/;
-    try_files /$host/notfound.html /notfound.html;
-    allow all;
-}
-
-location @error {
-    root /var/www/error_pages/;
-    try_files /$host/error.html /error.html;
-    allow all;
-}
-
-location @offline {
-    root /var/www/error_pages/;
-    try_files /$host/offline.html /offline.html;
-    allow all;
-}
