@@ -65,6 +65,7 @@
     group: www-data
   with_items:
     - error.html
+    - offline.html
     - denied.html
     - notfound.html
   become: yes
