@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Internal server error</title>
+        <title>System offline</title>
         <meta name="viewport" content="width=device-width,user-scalable=no">
         
         <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
@@ -17,7 +17,7 @@
                 left:50%;
                 transform: translateY(-30%) translateX(-50%);
                 border:1px solid #ddd;
-                padding:50px;
+                padding:30px 50px;
             }
 
             h1 {
@@ -32,6 +32,8 @@
 
             p {
                 color:#555;
+                max-width:330px;
+                display:inline-block;
             }
 
             @media (max-width: 500px) {
@@ -44,6 +46,9 @@
                 }
             }
         </style>
+        
+        <meta http-equiv="refresh" content="5">
+        
     </head>
     <body>
         <div id="content">
