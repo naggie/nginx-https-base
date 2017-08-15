@@ -47,6 +47,14 @@
             }
         </style>
         
+        <script>
+            setTimeout(function() {
+                // reload page -- GET or POST
+                // for service continuity
+                location.reload();
+            },4500)
+        </script>
+        <!-- fallback if no JS. GET only. -->
         <meta http-equiv="refresh" content="5">
         
     </head>
@@ -54,7 +62,7 @@
         <div id="content">
             
             <h2>System offline</h2>
-            <p>Essential maintenance in progress<br>Please try again later</p>
+            <p>Essential maintenance in progress<br>Your session will resume when complete</p>
         </div>
     </body>
 </html>
