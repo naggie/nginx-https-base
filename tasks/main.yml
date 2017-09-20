@@ -18,7 +18,7 @@
       /etc/nginx/dhparams.pem
   become: true
   notify:
-    - restart nginx
+    - reload nginx
 
 - name: Copy nginx config files for HTTP challenge + SSL settings
   copy:
@@ -31,7 +31,7 @@
     - uwsgi_params
   become: yes
   notify:
-    - restart nginx
+    - reload nginx
 
 - name: Remove default http nginx vhost
   become: yes
@@ -39,7 +39,7 @@
     path: /etc/nginx/sites-enabled/default
     state: absent
   notify:
-    - restart nginx
+    - reload nginx
 
 - name: make HTTP challenge directory
   become: yes
@@ -73,7 +73,7 @@
     - notfound.html
   become: yes
   notify:
-    - restart nginx
+    - reload nginx
 
 # nginx needs to be restarted if changed before letsencrypt challenge! -- but only if handler would have run otherwise
 - meta: flush_handlers
@@ -102,6 +102,6 @@
   become: yes
   with_items: "{{sites}}"
   notify:
-    - restart nginx
-    - no really, restart nginx
+    - reload nginx
+    - no really, reload nginx
 
