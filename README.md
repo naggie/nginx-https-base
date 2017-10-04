@@ -45,3 +45,13 @@ assets and IP blocking:
 Look at the similarly named template files for `uwsgi` and `static`
 configurations.
 
+
+To install this role, add the following lines to `requirements.yml`:
+
+```
+- src: https://github.com/naggie/nginx-https-base
+  version: master
+
+```
+
+...and then run `ansible-galaxy install -r requirements.yml`
