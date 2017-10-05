@@ -56,3 +56,16 @@ To install this role, add the following lines to `requirements.yml`:
 ```
 
 ...and then run `ansible-galaxy install -r requirements.yml`
+
+### Auto reloading maintenance page
+
+Upon a 502 error when running as a reverse proxy or uwsgi gateway,
+nginx-https-base is configured to serve a automatically-reloading page to
+resume a user's session without losing data.
+
+![autoreload](https://github.com/naggie/nginx-https-base/raw/master/autoreload.gif)
+
+Failed GET and POST requests will be re-attempted. Sometimes this is not what
+you want if you are dealing with large POST requests, for example; in which
+case, please edit the error page or handler.
+
