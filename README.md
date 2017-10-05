@@ -18,6 +18,7 @@ Example usages, using `include_role` for sane variable scoping:
   include_role:
     name: nginx-https-base
   vars:
+    admin_email: admin@example.com
     sites:
       - domain: example.com
         template: proxy.conf
