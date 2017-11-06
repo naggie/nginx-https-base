@@ -95,6 +95,15 @@
     user: root
   become: true
 
+- name: Add cron job to auto reload certificates
+  cron:
+    name: Reload nginx
+    minute: 31
+    hour: 3
+    job: service nginx reload
+    user: root
+  become: true
+
 - name: Create nginx sites
   template:
     src: "{{item.template}}"
