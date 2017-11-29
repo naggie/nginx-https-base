@@ -100,7 +100,7 @@
     name: Reload nginx
     minute: 31
     hour: 3
-    job: service nginx reload
+    job: /bin/systemctl reload nginx
     user: root
   become: true
 
