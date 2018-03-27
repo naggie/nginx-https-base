@@ -6,7 +6,6 @@
   become: yes
   with_items:
     - nginx
-    - nginx-extras
     - letsencrypt
     - openssl
 
