@@ -1,3 +1,16 @@
+- name: trust nginx apt server
+  become: yes
+  apt_key:
+    data: "{{ lookup('file', 'nginx_signing.key') }}"
+    state: present
+
+- name: add nginx apt-sources for mainline
+  become: yes
+  apt_repository:
+    repo: deb http://nginx.org/packages/mainline/ubuntu/ xenial nginx
+    state: present
+    filename: nginx
+
 - name: install nginx + letsencrypt
   apt:
     name: "{{item}}"
