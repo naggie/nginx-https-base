@@ -26,6 +26,7 @@ error_page 401 403 /_errors/denied.html;
 error_page 404 /_errors/notfound.html;
 error_page 400 500 501 503 504 /_errors/error.html;
 error_page 502 /_errors/offline.html;
+error_page 413 /_errors/ratelimit.html
 
 location /_errors/ {
     internal;
