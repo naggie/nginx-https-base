@@ -8,7 +8,8 @@ nginx-https-base is an nginx role for andible with the following features:
 5. Canonical static hosting configuration
 6. Canonical redirect configuration
 7. Auto-reloading maintenance page for reverse-proxy/uwsgi configurations
-8. Better (minimal) error pages
+8. Clean and minimal error pages. They can be customised with a logo using
+   `epgen/epgen.py`.
 
 
 Example usages, using `include_role` for sane variable scoping:

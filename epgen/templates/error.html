@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{title}}</title>
+        <meta name="viewport" content="width=device-width,user-scalable=no">
+        {# no favicon/similar requests! #}
+        <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+        <style>
+            body {
+                font-family:Sans-serif;
+                text-align:center;
+                user-select:none;
+            }
+            #content {
+                position: absolute;
+                top:30%;
+                left:50%;
+                transform: translateY(-30%) translateX(-50%);
+                border:1px solid #ddd;
+                padding:30px 50px;
+            }
+
+            h1 {
+                font-size:3em;
+                font-weight:normal;
+            }
+
+            h2 {
+                color:#444;
+                font-weight:normal;
+            }
+
+            p {
+                color:#555;
+                max-width:500px;
+                display:inline-block;
+            }
+
+            @media (max-width: 500px) {
+                #content {
+                    width:100%;
+                    box-sizing:border-box;
+                    border-left:none;
+                    border-right:none;
+                    padding:50px 0;
+                }
+            }
+
+        {% if auto_retry %}
+			/* inspired by http://dev.gojko.net/web/2015/09/19/material-design-progress-pure-css.html */
+			.progress-line, .progress-line:before {
+				height:1px;
+				width:100%;
+				margin:0;
+			}
+			.progress-line {
+				background-color:#ddd;
+				display:flex;
+				margin:50px 0 30px 0;
+			}
+			.progress-line:before {
+				background-color:#444;
+				content:'';
+				animation:running-progress 5s ease infinite;
+			}
+			@keyframes running-progress {
+				0% { margin-left:0px; margin-right:100%; }
+				10% { margin-left:0px; margin-right:100%; }
+				50% { margin-left:25%; margin-right:25%; }
+				90% { margin-left:100%; margin-right:0; }
+				100% { margin-left:100%; margin-right:0; }
+			}
+        {% endif %}
+        </style>
+        {% if auto_retry %}
+        <script>
+            setTimeout(function() {
+                // reload page -- GET or POST
+                // for service continuity
+                location.reload();
+            },4500)
+        </script>
+        <!-- fallback if no JS. GET only. -->
+        <meta http-equiv="refresh" content="5">
+        {% endif %}
+    </head>
+    <body>
+        <div id="content">
+            {% if logo_data_uri %}<img src="{{logo_data_uri}}" alt="logo" />{% endif %}
+            <h2>{{title}}</h2>
+            {% if auto_retry %}
+            <div class="progress-line"></div>
+            {% endif %}
+            <p>{{message}}</p>
+        </div>
+    </body>
+</html>
