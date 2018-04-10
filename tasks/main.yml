@@ -16,6 +16,7 @@
     name: "{{item}}"
     state: present
     update_cache: yes
+    upgrade: yes
   become: yes
   with_items:
     - nginx
