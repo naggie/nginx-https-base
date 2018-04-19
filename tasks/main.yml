@@ -58,7 +58,7 @@
   file:
     path: /var/www/letsencrypt/.well-known
     state: directory
-    owner: www-data
+    owner: letsencrypt
     group: www-data
 
 - name: make error_pages directory
