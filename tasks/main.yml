@@ -69,6 +69,29 @@
     owner: www-data
     group: www-data
 
+- name: Ensure ssl-cert group exists
+  group:
+    name: ssl-cert
+    state: present
+
+- name: create letsencrypt user
+  user:
+    name: letsencrypt
+    shell: /bin/nologin
+    group: ssl-cert
+    append: yes
+
+- name: ensure letsencrypt directories exist and are owned by letsencrypt
+  become: yes
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: letsencrypt
+    group: ssl-cert
+  with_items:
+    - /etc/letsencrypt/
+    - /var/log/letsencrypt/
+    - /var/lib/letsencrypt/
 
 - name: Copy HTML error pages if they're not already there
   # override them if you like, with a role that uses this role.
