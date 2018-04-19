@@ -105,6 +105,19 @@
     - /var/lib/letsencrypt/
   become: true
 
+# required to allow ssl-cert members to read keys
+- name: Allow group listing of directories
+  command:
+    cmd: chmod 750 /etc/letsencrypt/{{item}}
+  with_items:
+    - accounts
+    - archive
+    - csr
+    - keys
+    - live
+    - renewal
+  become: true
+
 - name: Copy HTML error pages if they're not already there
   # override them if you like, with a role that uses this role.
   copy:
@@ -134,6 +147,8 @@
   with_items: "{{sites}}"
   become: true
   become_user: letsencrypt
+  notify:
+    - reload nginx
 
 - name: Add cron job to auto renew
   cron:
