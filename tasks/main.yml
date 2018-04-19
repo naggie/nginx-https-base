@@ -53,14 +53,6 @@
   notify:
     - reload nginx
 
-- name: make HTTP challenge directory
-  become: yes
-  file:
-    path: /var/www/letsencrypt/.well-known
-    state: directory
-    owner: letsencrypt
-    group: www-data
-
 - name: make error_pages directory
   become: yes
   file:
@@ -73,6 +65,7 @@
   group:
     name: ssl-cert
     state: present
+  become: yes
 
 - name: create letsencrypt user
   user:
@@ -80,6 +73,15 @@
     shell: /bin/nologin
     group: ssl-cert
     append: yes
+  become: yes
+
+- name: make HTTP challenge directory
+  become: yes
+  file:
+    path: /var/www/letsencrypt/.well-known
+    state: directory
+    owner: letsencrypt
+    group: www-data
 
 - name: ensure letsencrypt directories exist and are owned by letsencrypt
   become: yes
