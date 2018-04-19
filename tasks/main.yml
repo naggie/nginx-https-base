@@ -93,6 +93,16 @@
     - /var/log/letsencrypt/
     - /var/lib/letsencrypt/
 
+# not using native ansible is probably faster
+- name: Migrate old root-owned directories
+  command:
+    cmd: chown -R letsencrypt:ssl-cert {{item}}
+  with_items:
+    - /etc/letsencrypt/
+    - /var/log/letsencrypt/
+    - /var/lib/letsencrypt/
+  become: true
+
 - name: Copy HTML error pages if they're not already there
   # override them if you like, with a role that uses this role.
   copy:
@@ -121,6 +131,7 @@
       /etc/letsencrypt/live/{{item.domain}}/fullchain.pem
   with_items: "{{sites}}"
   become: true
+  become_user: letsencrypt
 
 - name: Add cron job to auto renew
   cron:
@@ -128,7 +139,7 @@
     minute: 21
     hour: 3
     job: letsencrypt renew -n
-    user: root
+    user: letsencrypt
   become: true
 
 - name: Add cron job to auto reload certificates
