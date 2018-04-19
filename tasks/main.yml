@@ -14,9 +14,8 @@
 - name: install nginx + letsencrypt
   apt:
     name: "{{item}}"
-    state: present
+    state: latest
     update_cache: yes
-    upgrade: yes
   become: yes
   with_items:
     - nginx
