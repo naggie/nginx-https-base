@@ -5,7 +5,7 @@ Usage: {0} nologo
 
 Generate error pages given a logo. The second command gives no logo.
 """
-from sys import argv,exit
+from sys import argv, exit
 from os.path import dirname
 from os.path import realpath
 from os.path import join
@@ -16,13 +16,14 @@ from mimetypes import guess_type
 __version__ = '0.1'
 SCRIPT_DIR = dirname(realpath(__file__))
 
+
 def main():
     if len(argv) < 2:
         print(__doc__.format(argv[0]))
         exit(1)
 
     env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(join(SCRIPT_DIR,'templates')),
+        loader=jinja2.FileSystemLoader(join(SCRIPT_DIR, 'templates')),
     )
 
     logo_file = argv[1]
@@ -30,9 +31,9 @@ def main():
     if logo_file != 'nologo':
         with open(logo_file) as f:
             env.globals['logo_data_uri'] = 'data:{mimetype};base64,{data}'.format(
-                    mimetype=guess_type(logo_file)[0],
-                    data=b64encode(f.read().encode()).decode(),
-                )
+                mimetype=guess_type(logo_file)[0],
+                data=b64encode(f.read().encode()).decode(),
+            )
 
     template = env.get_template('error.html')
 
