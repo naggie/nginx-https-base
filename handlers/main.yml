@@ -3,6 +3,6 @@
   become: true
 
 # independent of flush handlers. BUG IMO.
-- name: no really, reload nginx
-  service: name=nginx state=reloaded
+- name: restart nginx
+  service: name=nginx state=restarted
   become: true

@@ -11,7 +11,17 @@
     state: present
     filename: nginx
 
-- name: install nginx + letsencrypt
+- name: install letsencrypt, openssl
+  apt:
+    name: "{{item}}"
+    state: latest
+    update_cache: yes
+  become: yes
+  with_items:
+    - letsencrypt
+    - openssl
+
+- name: install nginx
   apt:
     name: "{{item}}"
     state: latest
@@ -21,6 +31,8 @@
     - nginx
     - letsencrypt
     - openssl
+  notify:
+    - restart nginx
 
 # https://weakdh.org/sysadmin.html
 - name: Generate secure dhparams
@@ -176,5 +188,4 @@
   with_items: "{{sites}}"
   notify:
     - reload nginx
-    - no really, reload nginx
 
