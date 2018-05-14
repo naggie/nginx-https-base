@@ -23,14 +23,10 @@
 
 - name: install nginx
   apt:
-    name: "{{item}}"
+    name: nginx
     state: latest
     update_cache: yes
   become: yes
-  with_items:
-    - nginx
-    - letsencrypt
-    - openssl
   notify:
     - restart nginx
 
