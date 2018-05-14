@@ -102,6 +102,7 @@
     - /etc/letsencrypt/
     - /var/log/letsencrypt/
     - /var/lib/letsencrypt/
+    - /var/www/letsencrypt/
 
 # not using native ansible is probably faster
 - name: Migrate old root-owned directories
@@ -111,6 +112,7 @@
     - /etc/letsencrypt/
     - /var/log/letsencrypt/
     - /var/lib/letsencrypt/
+    - /var/www/letsencrypt/
   become: true
 
 # required to allow ssl-cert members to read keys
