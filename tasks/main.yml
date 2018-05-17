@@ -7,9 +7,12 @@
 - name: add nginx apt-sources for mainline
   become: yes
   apt_repository:
-    repo: deb http://nginx.org/packages/mainline/ubuntu/ xenial nginx
+    repo: "{{item}}"
     state: present
     filename: nginx
+  with_items:
+    - deb http://nginx.org/packages/mainline/ubuntu/ xenial nginx
+    - deb-src http://nginx.org/packages/mainline/ubuntu/ xenial nginx
 
 - name: install letsencrypt, openssl
   apt:
