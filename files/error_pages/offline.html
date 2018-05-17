@@ -47,29 +47,29 @@
             }
 
         
-			/* inspired by http://dev.gojko.net/web/2015/09/19/material-design-progress-pure-css.html */
-			.progress-line, .progress-line:before {
-				height:1px;
-				width:100%;
-				margin:0;
-			}
-			.progress-line {
-				background-color:#ddd;
-				display:flex;
-				margin:50px 0 30px 0;
-			}
-			.progress-line:before {
-				background-color:#444;
-				content:'';
-				animation:running-progress 5s ease infinite;
-			}
-			@keyframes running-progress {
-				0% { margin-left:0px; margin-right:100%; }
-				10% { margin-left:0px; margin-right:100%; }
-				50% { margin-left:25%; margin-right:25%; }
-				90% { margin-left:100%; margin-right:0; }
-				100% { margin-left:100%; margin-right:0; }
-			}
+            /* inspired by http://dev.gojko.net/web/2015/09/19/material-design-progress-pure-css.html */
+            .progress-line, .progress-line:before {
+                height:1px;
+                width:100%;
+                margin:0;
+            }
+            .progress-line {
+                background-color:#ddd;
+                display:flex;
+                margin:50px 0 30px 0;
+            }
+            .progress-line:before {
+                background-color:#444;
+                content:'';
+                animation:running-progress 5s ease infinite;
+            }
+            @keyframes running-progress {
+                0% { margin-left:0px; margin-right:100%; }
+                10% { margin-left:0px; margin-right:100%; }
+                50% { margin-left:25%; margin-right:25%; }
+                90% { margin-left:100%; margin-right:0; }
+                100% { margin-left:100%; margin-right:0; }
+            }
         
         </style>
         
