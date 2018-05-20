@@ -72,6 +72,17 @@
     owner: www-data
     group: www-data
 
+- name: make sure conf.d/sites-enabled exists
+  become: yes
+  file:
+    path: "{{item}}"
+    state: directory
+    mode: 0755
+  with_items:
+    - /etc/nginx/sites-enabled
+    - /etc/nginx/conf.d
+
+
 - name: Ensure ssl-cert group exists
   group:
     name: ssl-cert
