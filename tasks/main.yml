@@ -201,3 +201,12 @@
   notify:
     - reload nginx
 
+- name: Fix logrotate with nginx/rsyslog (16.04)
+  copy:
+    src: logrotate.d/nginx
+    dest: "/etc/logrotate.d/{{item}}"
+    mode: 0644
+  become: yes
+  with_items:
+    - nginx
+    - rsyslog
