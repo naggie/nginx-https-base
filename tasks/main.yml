@@ -141,6 +141,7 @@
     - live
     - renewal
   become: true
+  ignore_errors: yes
 
 - name: Copy HTML error pages if they're not already there
   # override them if you like, with a role that uses this role.
