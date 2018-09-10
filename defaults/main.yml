@@ -1,1 +1,2 @@
 sites: []
+rewrite_origin_and_referrer: false
