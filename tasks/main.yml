@@ -164,12 +164,19 @@
 # nginx needs to be restarted if changed before letsencrypt challenge! -- but only if handler would have run otherwise
 - meta: flush_handlers
 
+- name: Remove letsencrypt config in case migration to fixed certs was performed
+  file:
+    path: /etc/letsencrypt/renewal/{{item.domain}}.conf
+    state: absent
+  with_items: "{{sites}}"
+
 - name: Initialise domains + grab initial certs
   command:
     cmd: letsencrypt certonly -n --agree-tos --webroot --webroot-path /var/www/letsencrypt --email {{admin_email}} -d {{item.domain}}
     creates:
       /etc/letsencrypt/live/{{item.domain}}/fullchain.pem
   with_items: "{{sites}}"
+  when: item.fixed_crt is not defined
   become: true
   become_user: letsencrypt
   notify:
