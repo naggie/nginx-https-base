@@ -165,6 +165,7 @@
 - meta: flush_handlers
 
 - name: Remove letsencrypt config in case migration to fixed certs was performed
+  become: yes
   file:
     path: /etc/letsencrypt/renewal/{{item.domain}}.conf
     state: absent
