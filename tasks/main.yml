@@ -170,6 +170,34 @@
     state: absent
   with_items: "{{sites}}"
 
+- name: Make fixed cert directories
+  become: yes
+  file:
+    path: "/etc/ssl/{{item.domain}}"
+    state: directory
+  when: item.fixed_crt is defined
+  with_items: "{{sites}}"
+
+- name: Copy fixed certs if fixed_crt is defined
+  copy:
+    src: "{{item.fixed_crt}}"
+    dst: "/etc/ssl/{{item.domain}}/fullchain.pem"
+  with_items: "{{sites}}"
+  when: item.fixed_crt is defined
+  become: true
+  notify:
+    - reload nginx
+
+- name: Copy fixed keys if fixed_crt is defined
+  copy:
+    src: "{{item.fixed_key}}"
+    dst: "/etc/ssl/{{item.domain}}/privkey.pem"
+  with_items: "{{sites}}"
+  when: item.fixed_crt is defined
+  become: true
+  notify:
+    - reload nginx
+
 - name: Initialise domains + grab initial certs
   command:
     cmd: letsencrypt certonly -n --agree-tos --webroot --webroot-path /var/www/letsencrypt --email {{admin_email}} -d {{item.domain}}
