@@ -117,6 +117,12 @@
     - /var/log/letsencrypt/
     - /var/lib/letsencrypt/
     - /var/www/letsencrypt/
+    - /etc/letsencrypt/accounts
+    - /etc/letsencrypt/archive
+    - /etc/letsencrypt/csr
+    - /etc/letsencrypt/keys
+    - /etc/letsencrypt/live
+    - /etc/letsencrypt/renewal
 
 # not using native ansible is probably faster
 - name: Migrate old root-owned directories
