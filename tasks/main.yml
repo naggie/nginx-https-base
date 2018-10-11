@@ -188,7 +188,7 @@
 - name: Copy fixed certs if fixed_crt is defined
   copy:
     src: "{{item.fixed_crt}}"
-    dst: "/etc/ssl/{{item.domain}}/fullchain.pem"
+    dest: "/etc/ssl/{{item.domain}}/fullchain.pem"
   with_items: "{{sites}}"
   when: item.fixed_crt is defined
   become: true
@@ -198,7 +198,7 @@
 - name: Copy fixed keys if fixed_crt is defined
   copy:
     src: "{{item.fixed_key}}"
-    dst: "/etc/ssl/{{item.domain}}/privkey.pem"
+    dest: "/etc/ssl/{{item.domain}}/privkey.pem"
   with_items: "{{sites}}"
   when: item.fixed_crt is defined
   become: true
