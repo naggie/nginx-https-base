@@ -177,18 +177,10 @@
     state: absent
   with_items: "{{sites}}"
 
-- name: Make fixed cert directories
-  become: yes
-  file:
-    path: "/etc/ssl/{{item.domain}}"
-    state: directory
-  when: item.fixed_crt is defined
-  with_items: "{{sites}}"
-
 - name: Copy fixed certs if fixed_crt is defined
   copy:
     src: "{{item.fixed_crt}}"
-    dest: "/etc/ssl/{{item.domain}}/fullchain.pem"
+    dest: "/etc/ssl/certs/{{item.domain}}.crt"
   with_items: "{{sites}}"
   when: item.fixed_crt is defined
   become: true
@@ -198,7 +190,7 @@
 - name: Copy fixed keys if fixed_crt is defined
   copy:
     src: "{{item.fixed_key}}"
-    dest: "/etc/ssl/{{item.domain}}/privkey.pem"
+    dest: "/etc/ssl/private/{{item.domain}}.key"
   with_items: "{{sites}}"
   when: item.fixed_crt is defined
   become: true
