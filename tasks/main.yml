@@ -16,13 +16,12 @@
 
 - name: install letsencrypt, openssl
   apt:
-    name: "{{item}}"
+    name:
+      - letsencrypt
+      - openssl
     state: latest
     update_cache: yes
   become: yes
-  with_items:
-    - letsencrypt
-    - openssl
 
 - name: install nginx
   apt:
