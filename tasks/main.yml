@@ -175,6 +175,7 @@
     path: /etc/letsencrypt/renewal/{{item.domain}}.conf
     state: absent
   with_items: "{{sites}}"
+  when: item.fixed_crt is not defined
 
 - name: Copy fixed certs if fixed_crt is defined
   copy:
