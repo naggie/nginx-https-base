@@ -188,6 +188,7 @@
   with_items: "{{sites}}"
   when: item.fixed_crt is defined
 
+
 - name: Copy fixed certs if fixed_crt is defined
   copy:
     src: "{{item.fixed_crt}}"
@@ -208,11 +209,22 @@
   notify:
     - reload nginx
 
+- name: Remove associated letsencrypt config if renewal config is missing (else the directory will be in a broken state)
+  become: yes
+  with_items: "{{sites}}"
+  command:
+    # command is used instead of native ansible equivalent as it's much more concise in this case
+    cmd: "rm -rf /etc/letsencrypt/archive/{{item.domain}} /etc/letsencrypt/live/{{item.domain}}"
+    creates:
+      # effectively runs if the renewal config is missing -- note that techically this only has to happen if fixed_crt is
+      # defined but previous versions of nginx-https-base left this broken.
+      path: /etc/letsencrypt/renewal/{{item.domain}}.conf
+
 - name: Initialise domains + grab initial certs
   command:
     cmd: certbot certonly -n --agree-tos --webroot --webroot-path /var/www/letsencrypt --email {{admin_email}} -d {{item.domain}}
     creates:
-      /etc/letsencrypt/live/{{item.domain}}/fullchain.pem
+      path: /etc/letsencrypt/renewal/{{item.domain}}.conf
   with_items: "{{sites}}"
   when: item.fixed_crt is not defined
   become: true
