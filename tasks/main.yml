@@ -212,6 +212,7 @@
 - name: Remove associated letsencrypt config if renewal config is missing (else the directory will be in a broken state)
   become: yes
   with_items: "{{sites}}"
+  ignore_errors: yes
   command:
     # command is used instead of native ansible equivalent as it's much more concise in this case
     cmd: "rm -rf /etc/letsencrypt/archive/{{item.domain}} /etc/letsencrypt/live/{{item.domain}}"
