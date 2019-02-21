@@ -14,15 +14,26 @@
     - deb http://nginx.org/packages/mainline/ubuntu/ xenial nginx
     - deb-src http://nginx.org/packages/mainline/ubuntu/ xenial nginx
 
-- name: install letsencrypt, openssl
+- name: add certbot PPA
+  become: yes
+  apt_repository:
+    repo: 'ppa:certbot/certbot'
+    state: present
+    update_cache: yes
+
+# the non-nginx specific version is chosen as nginx configurations are managed
+# by this ansible role -- we don't want certbot to mangle them.
+- name: install certbot, openssl
   apt:
     name:
-      - letsencrypt
+      - certbot
       - openssl
     state: latest
     update_cache: yes
   become: yes
 
+# this is separate, as triggering a restart of nginx should only be done if
+# necessary (in the first instance, installing from the mainline nginx repo) -
 - name: install nginx
   apt:
     name: nginx
@@ -88,9 +99,9 @@
     state: present
   become: yes
 
-- name: create letsencrypt user
+- name: create certbot user
   user:
-    name: letsencrypt
+    name: certbot
     shell: /bin/nologin
     group: ssl-cert
     append: yes
@@ -101,15 +112,15 @@
   file:
     path: /var/www/letsencrypt/.well-known
     state: directory
-    owner: letsencrypt
+    owner: certbot
     group: www-data
 
-- name: ensure letsencrypt directories exist and are owned by letsencrypt
+- name: ensure letsencrypt directories exist and are owned by certbot
   become: yes
   file:
     path: "{{item}}"
     state: directory
-    owner: letsencrypt
+    owner: certbot
     group: ssl-cert
   with_items:
     - /etc/letsencrypt/
@@ -126,7 +137,7 @@
 # not using native ansible is probably faster
 - name: Migrate old root-owned directories
   command:
-    cmd: chown -R letsencrypt:ssl-cert {{item}}
+    cmd: chown -R certbot:ssl-cert {{item}}
   with_items:
     - /etc/letsencrypt/
     - /var/log/letsencrypt/
@@ -199,13 +210,13 @@
 
 - name: Initialise domains + grab initial certs
   command:
-    cmd: letsencrypt certonly -n --agree-tos --webroot --webroot-path /var/www/letsencrypt --email {{admin_email}} -d {{item.domain}}
+    cmd: certbot certonly -n --agree-tos --webroot --webroot-path /var/www/letsencrypt --email {{admin_email}} -d {{item.domain}}
     creates:
       /etc/letsencrypt/live/{{item.domain}}/fullchain.pem
   with_items: "{{sites}}"
   when: item.fixed_crt is not defined
   become: true
-  become_user: letsencrypt
+  become_user: certbot
   notify:
     - reload nginx
 
@@ -214,8 +225,8 @@
     name: Renew certificates
     minute: 21
     hour: 3
-    job: letsencrypt renew -n
-    user: letsencrypt
+    job: certbot renew -n
+    user: certbot
   become: true
 
 - name: Add cron job to auto reload certificates
