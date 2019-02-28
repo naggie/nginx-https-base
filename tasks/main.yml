@@ -45,8 +45,8 @@
 
 # https://weakdh.org/sysadmin.html
 - name: Generate secure dhparams
-  command:
-    cmd: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+  command: openssl dhparam -out /etc/nginx/dhparams.pem 2048
+  args:
     creates:
       /etc/nginx/dhparams.pem
   become: true
@@ -136,8 +136,7 @@
 
 # not using native ansible is probably faster
 - name: Migrate old root-owned directories
-  command:
-    cmd: chown -R certbot:ssl-cert {{item}}
+  command: chown -R certbot:ssl-cert {{item}}
   with_items:
     - /etc/letsencrypt/
     - /var/log/letsencrypt/
@@ -147,8 +146,7 @@
 
 # required to allow ssl-cert members to read keys
 - name: Allow group listing of directories
-  command:
-    cmd: chmod 750 /etc/letsencrypt/{{item}}
+  command: chmod 750 /etc/letsencrypt/{{item}}
   with_items:
     - accounts
     - archive
@@ -221,10 +219,9 @@
     creates: /etc/letsencrypt/renewal/{{item.domain}}.conf
 
 - name: Initialise domains + grab initial certs
-  command:
-    cmd: certbot certonly -n --agree-tos --webroot --webroot-path /var/www/letsencrypt --email {{admin_email}} -d {{item.domain}}
-    creates:
-      path: /etc/letsencrypt/renewal/{{item.domain}}.conf
+  command: certbot certonly -n --agree-tos --webroot --webroot-path /var/www/letsencrypt --email {{admin_email}} -d {{item.domain}}
+  args:
+    creates: /etc/letsencrypt/renewal/{{item.domain}}.conf
   with_items: "{{sites}}"
   when: item.fixed_crt is not defined
   become: true
