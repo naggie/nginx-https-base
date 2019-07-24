@@ -29,10 +29,10 @@ def main():
     logo_file = argv[1]
 
     if logo_file != 'nologo':
-        with open(logo_file) as f:
+        with open(logo_file, 'rb') as f:
             env.globals['logo_data_uri'] = 'data:{mimetype};base64,{data}'.format(
                 mimetype=guess_type(logo_file)[0],
-                data=b64encode(f.read().encode()).decode(),
+                data=b64encode(f.read()),
             )
 
     template = env.get_template('error.html')
