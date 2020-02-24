@@ -172,15 +172,6 @@
   notify:
     - reload nginx
 
-- name: Add cron job to auto reload certificates
-  cron:
-    name: Reload nginx
-    minute: 31
-    hour: 3
-    job: /bin/systemctl reload nginx
-    user: root
-  become: true
-
 - name: Create nginx sites
   template:
     src: "{{item.template}}"
