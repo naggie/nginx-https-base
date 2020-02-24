@@ -92,70 +92,13 @@
     - /etc/nginx/sites-enabled
     - /etc/nginx/conf.d
 
-
-- name: Ensure ssl-cert group exists
-  group:
-    name: ssl-cert
-    state: present
-  become: yes
-
-- name: create certbot user
-  user:
-    name: certbot
-    shell: /bin/nologin
-    group: ssl-cert
-    append: yes
-  become: yes
-
 - name: make HTTP challenge directory
   become: yes
   file:
     path: /var/www/letsencrypt/.well-known
     state: directory
-    owner: certbot
+    owner: www-data
     group: www-data
-
-- name: ensure letsencrypt directories exist and are owned by certbot
-  become: yes
-  file:
-    path: "{{item}}"
-    state: directory
-    owner: certbot
-    group: ssl-cert
-  with_items:
-    - /etc/letsencrypt/
-    - /var/log/letsencrypt/
-    - /var/lib/letsencrypt/
-    - /var/www/letsencrypt/
-    - /etc/letsencrypt/accounts
-    - /etc/letsencrypt/archive
-    - /etc/letsencrypt/csr
-    - /etc/letsencrypt/keys
-    - /etc/letsencrypt/live
-    - /etc/letsencrypt/renewal
-
-# not using native ansible is probably faster
-- name: Migrate old root-owned directories
-  command: chown -R certbot:ssl-cert {{item}}
-  with_items:
-    - /etc/letsencrypt/
-    - /var/log/letsencrypt/
-    - /var/lib/letsencrypt/
-    - /var/www/letsencrypt/
-  become: true
-
-# required to allow ssl-cert members to read keys
-- name: Allow group listing of directories
-  command: chmod 750 /etc/letsencrypt/{{item}}
-  with_items:
-    - accounts
-    - archive
-    - csr
-    - keys
-    - live
-    - renewal
-  become: true
-  ignore_errors: yes
 
 - name: Copy HTML error pages if they're not already there
   # override them if you like, with a role that uses this role.
@@ -228,15 +171,6 @@
   become_user: certbot
   notify:
     - reload nginx
-
-- name: Add cron job to auto renew
-  cron:
-    name: Renew certificates
-    minute: 21
-    hour: 3
-    job: certbot renew -n
-    user: certbot
-  become: true
 
 - name: Add cron job to auto reload certificates
   cron:
